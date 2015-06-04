@@ -1,0 +1,14 @@
+**/node_modules
+example1/bower_components
+example2/app/bower_components
+example3/app/bower_components
+
+
+**/.tmp
+**/.sass-cache
+
+**/npm-debug.log
+
+**/dist
+
+
