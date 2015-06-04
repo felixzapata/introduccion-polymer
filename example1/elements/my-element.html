@@ -1,0 +1,19 @@
+<link rel="import" href="../bower_components/polymer/polymer.html">
+<link rel="import" href="../bower_components/iron-ajax/iron-ajax.html">
+
+<dom-module id="my-element">
+  <template>
+    <span>I'm <b>my-element</b>. This is my Shadow DOM.</span>
+    <iron-ajax auto handle-as="json" url="/zones.json" on-response="load"></iron-ajax>
+    <textarea value="{{resp}}"></textarea>
+  </template>
+</dom-module>
+
+<script>
+  Polymer({
+    is: "my-element",
+    load:function(event, detail){
+    	this.resp = detail.response[0].name;
+    }
+  });
+</script>
