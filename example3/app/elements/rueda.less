@@ -1,0 +1,146 @@
+@theme_Blue: #43a1cd;
+@theme_Green: #639b47;
+@theme_LightGreen: #9ac147;
+@theme_Yellow: #e1e23b;
+@theme_Orange: #f7941e;
+@theme_Rust: #ba3e2e;
+@theme_Red: #9a1d34;
+@theme_Purple: #662a6c;
+@theme_Violet: #272b66;
+@theme_Indigo: #2d559f;
+.transition(@speed: 0.2s, @easing: ease) {
+    -webkit-transition: all @speed @easing;
+    -moz-transition: all @speed @easing;
+    -ms-transition: all @speed @easing;
+    -o-transition: all @speed @easing;
+    transition: all @speed @easing;
+    -webkit-animation-iteration-count: infinite;
+    -moz-animation-iteration-count: infinite;
+}
+
+.no-select() {
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    -o-user-select: none;
+    user-select: none;
+}
+
+.rotate(@degrees: 90deg) {
+    -webkit-transform: rotate(@degrees);
+    -moz-transform: rotate(@degrees);
+    -ms-transform: rotate(@degrees);
+    -o-transform: rotate(@degrees);
+    transform: rotate(@degrees);
+}
+
+.origin(@x, @y) {
+    -webkit-transform-origin: @x @y;
+    -moz-transform-origin: @x @y;
+    -ms-transform-origin: @x @y;
+    -o-transform-origin: @x @y;
+    transform-origin: @x @y;
+}
+
+.swatch(@color) {
+    border-color: @color transparent transparent transparent;
+}
+
+#colorWheel {
+    -webkit-animation: intro 3s ease;
+    height: 100px;
+    width: 100px;
+    margin: 0 auto;
+    position: relative;
+    .origin(50px, 150px);
+    .no-select();
+    span {
+        @deg: (360 / 10deg);
+        position: absolute;
+        -webkit-transform-origin: 50% 50%;
+        border-style: solid;
+        border-width: 150px 50px;
+        box-sizing: border-box;
+        &.color01 {
+            .rotate(@deg * 0);
+            .swatch(@theme_Blue);
+        }
+        &.color02 {
+            .rotate(@deg * 1);
+            .swatch(@theme_Green);
+        }
+        &.color03 {
+            .rotate(@deg * 2);
+            .swatch(@theme_LightGreen);
+        }
+        &.color04 {
+            .rotate(@deg * 3);
+            .swatch(@theme_Yellow);
+        }
+        &.color05 {
+            .rotate(@deg * 4);
+            .swatch(@theme_Orange);
+        }
+        &.color06 {
+            .rotate(@deg * 5);
+            .swatch(@theme_Rust);
+        }
+        &.color07 {
+            .rotate(@deg * 6);
+            .swatch(@theme_Red);
+        }
+        &.color08 {
+            .rotate(@deg * 7);
+            .swatch(@theme_Purple);
+        }
+        &.color09 {
+            .rotate(@deg * 8);
+            .swatch(@theme_Violet);
+        }
+        &.color10 {
+            .rotate(@deg * 9);
+            .swatch(@theme_Indigo);
+        }
+    }
+    &.rotating {
+        .rotate(540deg);
+    }
+    &.stop {
+        .rotate(0);
+        .transition(0.5s, linear);
+    }
+    &:before {
+        content: "";
+        width: 300px;
+        height: 300px;
+        overflow: hidden;
+        position: absolute;
+        top: -30px;
+        left: -130px;
+        border-radius: 100%;
+        border: 30px solid fade(white, 100%);
+        z-index: 100;
+    }
+    &:after {
+        content: "";
+        width: 100px;
+        height: 100px;
+        overflow: hidden;
+        position: absolute;
+        top: 100px;
+        left: 0px;
+        border-radius: 100%;
+        background: fade(white, 100%);
+    }
+    @-webkit-keyframes intro {
+        0% {
+            .rotate(0)
+        }
+        50% {
+            .rotate(720deg)
+        }
+        100% {
+            .rotate(0)
+        }
+    }
+}

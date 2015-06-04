@@ -1,0 +1,42 @@
+<link rel="import" href="../bower_components/polymer/polymer.html">
+<dom-module id="color-wheel">
+    <link rel="stylesheet" href="rueda.css" />
+    <template>
+        <p>
+            <button on-click='toggle'>Parar</button>
+            <button on-click='toggle'>Girar</button>
+        </p>
+        <div id="colorWheel" class$="{{ getClass() }}">
+            <span class="color01"></span>
+            <span class="color02"></span>
+            <span class="color03"></span>
+            <span class="color04"></span>
+            <span class="color05"></span>
+            <span class="color06"></span>
+            <span class="color07"></span>
+            <span class="color08"></span>
+            <span class="color09"></span>
+            <span class="color10"></span>
+        </div>
+    </template>
+</dom-module>
+    <script>
+    Polymer({
+        is: 'color-wheel',
+        properties: {
+            rotating: {
+                type: Boolean,
+                notify: true,
+                value: false,
+                observer: 'getClass'
+            }
+        },
+        toggle: function() {
+            this.rotating = !this.rotating;
+        },
+        getClass: function(){
+            return (this.rotating) ? 'stop' : 'rotating'
+        }
+
+    })
+    </script>

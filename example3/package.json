@@ -1,0 +1,16 @@
+{
+  "name": "polymer-test",
+  "version": "0.0.0",
+  "description": "",
+  "main": "gulpfile.js",
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "gulp": "^3.8.11",
+    "gulp-less": "^3.0.3",
+    "gulp-plumber": "^1.0.1",
+    "gulp-vulcanize": "^6.0.0",
+    "gulp-webserver": "^0.9.1",
+    "run-sequence": "^1.1.0"
+  }
+}
