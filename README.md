@@ -10,20 +10,20 @@ Para ejecutar los proyectos es necesario:
 ### Ejemplo 1
 
 ```shell
-npm install
+npm install && bower install
 gulp webserver
 ```
 
 ### Ejemplo 2
 
 ```shell
-npm install
+npm install && bower install
 gulp webserver
 ```
 
 ### Ejemplo 3
 
 ```shell
-npm install
+npm install && bower install
 gulp webserver
 ```
