@@ -1,0 +1,10 @@
+[
+	{"name": "Turquía", "offset": "+03:00"},
+	{"name": "Uruguay", "offset": "-03:00"},
+	{"name": "Venezuela", "offset": "-04:30"},
+	{"name": "Vietnam", "offset": "+07:00"},
+	{"name": "Madrid"},
+	{"name": "Las Canarias", "offset": "+01:00"},
+	{"name": "Los Ángeles", "offset": "-0700"},
+	{"name": "Zulu", "offset": "Z"}
+]

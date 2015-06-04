@@ -1,0 +1,55 @@
+<link rel="import" href="../../bower_components/polymer/polymer.html">
+
+<dom-module id="mi-cilindro" attributes="min,max,current, separator">
+	<link rel="import" type="css" href="mi-cilindro.css" />
+  <template>
+    <div class="franja">
+      <div class="separator">{{separator}}</div>
+      <template is="dom-repeat" items="{{numbers}}" as="number">
+        <div class$="{{clase(number, current)}}">{{number}}</div>
+      </template>
+    </div>
+  </template>
+
+	
+</dom-module>
+<script>
+	Polymer({
+		is:'mi-cilindro',
+		properties: {
+        min: {
+            type: String
+        },
+        max: {
+        	type: String
+        },
+        current: {
+        	type: String
+        },
+        separator: {
+        	type: String
+        }
+    },
+		ready: function (argument) {
+			var numbers = this.numbers = [];
+			for(var i = this.min; i <= this.max; i++){
+				this.push('numbers', i);
+			}
+		},
+		clase: function (number, current) {
+			var diff = current - number;
+			if (diff == 0) {
+				return 'number current';
+			}
+			if ((diff == 1) || (diff == (this.min - this.max))){
+				return 'number top';
+			}
+			if ((diff == -1) || (diff == (this.max - this.min))){
+				return 'number bottom';
+			}
+			return 'number hide';
+
+		}
+
+	});
+	</script>

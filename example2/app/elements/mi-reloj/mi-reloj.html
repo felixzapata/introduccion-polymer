@@ -1,0 +1,58 @@
+<link rel="import" href="../../bower_components/polymer/polymer.html">
+<dom-module id="mi-reloj" attributes="offset">
+    <template>
+        <style>
+        div {
+            display: flex
+        }
+        </style>
+        <div>
+            <mi-cilindro min="0" max="23" current="{{hours}}"></mi-cilindro>
+            <mi-cilindro min="0" max="59" current="{{minutes}}" separator=":"></mi-cilindro>
+            <mi-cilindro min="0" max="59" current="{{seconds}}" separator=":"></mi-cilindro>
+        </div>
+    </template>
+</dom-module>
+<script>
+var patron = /^([\+\-])(\d\d):?(\d\d)?$/;
+
+function calculateOffset(offset) {
+    if (!offset) {
+        return -(new Date()).getTimezoneOffset();
+    }
+    if (offset == "Z") {
+        return 0;
+    }
+    var match = offset.match(patron);
+    var signo = match[1] === "+" ? 1 : -1;
+    var horas = parseInt(match[2]);
+    var minutos = match[3] ? parseInt(match[3]) : 0;
+    return signo * ((horas * 60) + minutos);
+}
+
+Polymer({
+    is: 'mi-reloj',
+    properties: {
+        offset: {
+            type: String
+        }
+    },
+    ready: function(argument) {
+        this.tick();
+    },
+    tick: function() {
+        this.calculateDate();
+        //this.async(this.tick, null, 10);
+        setTimeout(function() {
+            this.tick();
+        }.bind(this), 10);
+    },
+    calculateDate: function() {
+        var date = new Date();
+        date = new Date(date.getTime() + calculateOffset(this.offset) * 60000);
+        this.hours = date.getUTCHours();
+        this.minutes = date.getUTCMinutes();
+        this.seconds = date.getUTCSeconds();
+    }
+});
+</script>

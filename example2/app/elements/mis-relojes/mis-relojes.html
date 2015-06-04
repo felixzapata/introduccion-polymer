@@ -1,0 +1,69 @@
+<link rel="import" href="../../bower_components/polymer/polymer.html">
+<link rel="import" href="../../bower_components/iron-ajax/iron-ajax.html">
+<dom-module id="mis-relojes">
+    <template>
+        <h1>Relojes</h1>
+        <iron-ajax auto handle-as="json" url="/zones.json" on-response="loadZones"></iron-ajax>
+        <select on-change="add">
+            <option>Selecciona zona horaria</option>
+            <template is="dom-repeat" items="{{zones}}" as="zone" index-as="i">
+                <option value="{{i}}">{{zone.name}}</option>
+            </template>
+        </select>
+        <hr>
+        <table>
+            <template is="dom-repeat" items="{{selectedZones}}" as="zone" index-as="i">
+                <tr data-i$="{{i}}" on-click="remove">
+                    <td>{{zone.name}}</td>
+                    <td>
+                        <mi-reloj offset="{{zone.offset}}"></mi-reloj>
+                    </td>
+                </tr>
+            </template>
+        </table>
+    </template>
+    <script>
+    function sort(a, b) {
+        return a.name > b.name;
+    };
+    Polymer({
+        is: 'mis-relojes',
+        properties: {
+            selectedZones: {
+                type: Array,
+                notify: true,
+                value: [],
+                observer: 'selectedZonesChanged'
+            },
+            zones: {
+                type: Array,
+                notify: true,
+                value: [],
+                observer: 'zonesChanged'
+            }
+        },
+
+        zonesChanged: function(changeRecord) {
+            this.zones.sort(sort);
+        },
+        selectedZonesChanged: function(changeRecord) {
+            this.selectedZones.sort(sort);
+        },
+        
+        loadZones: function(event, detail) {
+            this.zones = detail.response;
+            this.zones.sort(sort);
+        },
+        add: function(e) {
+            var target = e.target;
+            var zone = this.splice('zones', parseInt(target.value, 10), 1);
+            this.push('selectedZones', zone[0]);
+        },
+        remove: function(e) {
+            var target = e.target.parentNode;
+            var zone = this.splice('selectedZones', parseInt(target.attributes['data-i'].value, 10), 1);
+            this.push('zones', zone[0]);
+        }
+    });
+    </script>
+</dom-module>
