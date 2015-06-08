@@ -6,7 +6,7 @@
             <button on-click='toggle'>Parar</button>
             <button on-click='toggle'>Girar</button>
         </p>
-        <div id="colorWheel" class$="{{ getClass() }}">
+        <div id="colorWheel" class$="{{move}}">
             <span class="color01"></span>
             <span class="color02"></span>
             <span class="color03"></span>
@@ -20,23 +20,19 @@
         </div>
     </template>
 </dom-module>
-    <script>
-    Polymer({
-        is: 'color-wheel',
-        properties: {
-            rotating: {
-                type: Boolean,
-                notify: true,
-                value: false,
-                observer: 'getClass'
-            }
-        },
-        toggle: function() {
-            this.rotating = !this.rotating;
-        },
-        getClass: function(){
-            return (this.rotating) ? 'stop' : 'rotating'
+<script>
+Polymer({
+    is: 'color-wheel',
+    properties: {
+        move: {
+            type: String,
+            value: 'stop',
+            notify: true
         }
+    },
+    toggle: function() {
+        this.move = (this.move === 'rotating') ? 'stop' : 'rotating';
+    }
 
-    })
-    </script>
+});
+</script>
