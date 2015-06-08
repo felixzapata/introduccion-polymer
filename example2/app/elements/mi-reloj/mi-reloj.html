@@ -42,10 +42,7 @@ Polymer({
     },
     tick: function() {
         this.calculateDate();
-        //this.async(this.tick, null, 10);
-        setTimeout(function() {
-            this.tick();
-        }.bind(this), 10);
+        this.async(this.tick, 10);
     },
     calculateDate: function() {
         var date = new Date();
