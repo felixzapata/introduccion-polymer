@@ -47,7 +47,6 @@
 }
 
 #colorWheel {
-    -webkit-animation: intro 3s ease;
     height: 100px;
     width: 100px;
     margin: 0 auto;
@@ -103,7 +102,14 @@
         }
     }
     &.rotating {
-        .rotate(540deg);
+        -webkit-animation-duration: 1s;
+        -moz-animation-duration: 1s;
+        -webkit-animation-name: rotate;
+        -webkit-animation-iteration-count: infinite;
+        -webkit-animation-timing-function: linear;
+        -moz-animation-name: rotate;
+        -moz-animation-iteration-count: infinite;
+        -moz-animation-timing-function: linear;
     }
     &.stop {
         .rotate(0);
@@ -132,15 +138,20 @@
         border-radius: 100%;
         background: fade(white, 100%);
     }
-    @-webkit-keyframes intro {
-        0% {
-            .rotate(0)
+    @-webkit-keyframes rotate {
+        from {
+            -webkit-transform: rotate(0deg);
         }
-        50% {
-            .rotate(720deg)
+        to {
+            -webkit-transform: rotate(360deg);
         }
-        100% {
-            .rotate(0)
+    }
+    @-moz-keyframes rotate {
+        from {
+            -moz-transform: rotate(0deg);
+        }
+        to {
+            -moz-transform: rotate(360deg);
         }
     }
 }
