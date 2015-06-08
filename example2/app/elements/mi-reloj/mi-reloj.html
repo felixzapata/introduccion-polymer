@@ -2,11 +2,11 @@
 <dom-module id="mi-reloj" attributes="offset">
     <template>
         <style>
-        div {
+        .reloj {
             display: flex
         }
         </style>
-        <div>
+        <div class="reloj">
             <mi-cilindro min="0" max="23" current="{{hours}}"></mi-cilindro>
             <mi-cilindro min="0" max="59" current="{{minutes}}" separator=":"></mi-cilindro>
             <mi-cilindro min="0" max="59" current="{{seconds}}" separator=":"></mi-cilindro>
