@@ -13,10 +13,10 @@
                     <rect x="0" y="0" width="150" height="150" />
                 </clipPath>
                 <circle cx="160" cy="160" r="160" fill="#ddd" />
-                <circle class="simonbutton" on-click="click" data-i='1' cx="160" cy="160" r="150" clip-path="url(#cut-circle)" fill="green" ng-class="{jugando: ('jugando' == estado), active: (ilumina==1)}" transform="translate(10,10)" />
-                <circle class="simonbutton" on-click="click" data-i='2' cx="160" cy="160" r="150" clip-path="url(#cut-circle)" fill="red" ng-class="{jugando: ('jugando' == estado), active: (ilumina==2)}" transform="rotate(90 150 150), translate(10, -10)" />
-                <circle class="simonbutton" on-click="click" data-i='3' cx="160" cy="160" r="150" clip-path="url(#cut-circle)" fill="blue" ng-class="{jugando: ('jugando' == estado), active: (ilumina==3)}" transform="rotate(180 150 150), translate(-10,-10)" />
-                <circle class="simonbutton" on-click="click" data-i='4' cx="160" cy="160" r="150" clip-path="url(#cut-circle)" fill="yellow" ng-class="{jugando: ('jugando' == estado), active: (ilumina==4)}" transform="rotate(270 150 150), translate(-10,10)" />
+                <circle on-click="click" data-i='1' cx="160" cy="160" r="150" clip-path="url(#cut-circle)" fill="green" class$="{{classForCircle(estado, ilumina, 1)}}" transform="translate(10,10)" />
+                <circle on-click="click" data-i='2' cx="160" cy="160" r="150" clip-path="url(#cut-circle)" fill="red" class$="{{classForCircle(estado, ilumina, 2)}}" transform="rotate(90 150 150), translate(10, -10)" />
+                <circle on-click="click" data-i='3' cx="160" cy="160" r="150" clip-path="url(#cut-circle)" fill="blue" class$="{{classForCircle(estado, ilumina, 3)}}" transform="rotate(180 150 150), translate(-10,-10)" />
+                <circle on-click="click" data-i='4' cx="160" cy="160" r="150" clip-path="url(#cut-circle)" fill="yellow" class$="{{classForCircle(estado, ilumina, 4)}}" transform="rotate(270 150 150), translate(-10,10)" />
                 <rect x="155" y="0" width="10" height="320" fill="#ddd" />
                 <rect x="0" y="155" width="320" height="10" fill="#ddd" />
                 <circle cx="160" cy="160" r="40" fill="#ddd" />
@@ -34,7 +34,17 @@ Polymer({
         dificultad: {
             type: String,
             notify: true
+        },
+    },
+    classForCircle: function(estado, ilumina, cual) {
+        var classElements = ['simonbutton'];
+        if(estado === 'jugando'){
+            classElements.push('jugando');
         }
+        if(ilumina === cual){
+            classElements.push('active');
+        }
+        return classElements.join(' ');
     },
     ready: function() {
         this.tones = new window.Tones();
@@ -107,7 +117,7 @@ Polymer({
     compruebaEntrada: function() {
         var i, len = this.marcados.length;
         for (i = 0; i < len; i++) {
-            if (marcados[i] !== pasos[i]) {
+            if (this.marcados[i] !== this.pasos[i]) {
                 this.partida.resolve({
                     tipo: 'error',
                     posicion: i
@@ -161,8 +171,7 @@ Polymer({
         if (this.estado !== 'jugando') {
             return;
         }
-        console.log(cual);
-        this.tones.play(cual, iluminado);
+        this.tones.play(cual, this.iluminado);
         this.push('marcados', cual);
         this.cancelaCuentaAtras();
         this.compruebaEntrada();
