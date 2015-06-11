@@ -4,8 +4,8 @@
     <template>
         <h3>Simon</h3>
         <div hidden$="{{!jugando}}">
-            <tablero-simon titulo="Simon con Polymer" dificultad="{{dificultad}}"></tablero-simon>
-            <!--tablero-simon titulo="Simon con Polymer" dificultad="dificultad" on-end="muestraResultado(resultado)"></tablero-simon-->
+            <!--tablero-simon titulo="Simon con Polymer" dificultad="{{dificultad}}"></tablero-simon-->
+            <tablero-simon titulo="Simon con Polymer" dificultad="{{dificultad}}" on-end="muestraResultado(resultado)"></tablero-simon>
         </div>
         <div hidden$="{{jugando}}">
             <div hidden$="{{!resultado}}">
@@ -35,14 +35,9 @@
                     <th>Motivo</th>
                 </tr>
                 <template is="dom-repeat" items="{{resultados}}" as="res">
-                    <tr ng-class="{actual: (res == resultado)}">
+                    <tr class$="{{getActual(res)}}">
                         <td>{{res.posicion}}</td>
-                        <td><span class="label" ng-class="{
-                        'label-success': (res.dificultad == 1),
-                        'label-info': (res.dificultad == 2),
-                        'label-warning': (res.dificultad == 3),
-                        'label-danger': (res.dificultad == 4)
-                    }">{{res.dificultad}}</span></td>
+                        <td><span class$="{{getResultado(res)}}">{{res.dificultad}}</span></td>
                         <td>{{res.movimientos}}</td>
                         <td>{{res.tiempo}}s</td>
                         <td>{{res.motivo.tipo}}</td>
@@ -69,6 +64,15 @@ Polymer({
           type: String,
           notify: true
         }
+    },
+
+    getActual: function(idx){
+      return (idx == resultado) ? 'actual' : '';
+    },
+
+    getResultado:function(idx){
+      var tipos = ['label-success', 'label-info', 'label-warning', 'label-danger'];
+      return 'label ' + tipos[idx.dificultad];
     },
 
     empieza: function(e) {
