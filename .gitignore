@@ -4,6 +4,9 @@ example2/app/bower_components
 example3/app/bower_components
 example3/app/**/*.css
 
+example4/app/bower_components
+example4/app/**/*.css
+
 
 **/.tmp
 **/.sass-cache

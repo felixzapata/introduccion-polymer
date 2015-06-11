@@ -1,0 +1,169 @@
+<link rel="import" href="../bower_components/polymer/polymer.html">
+<dom-module id="tablero-simon">
+    <link rel="stylesheet" href="simon.css" />
+    <template>
+        <h4>{{titulo}}</h4>
+        <div on-click="empieza">
+            <p>
+                <span class="btn btn-success" hidden$="{{ estado != 'esperando' }}">Start!</span>
+                <span>(Dificultad: <span>{{dificultad}}</span>)</span>
+            </p>
+            <svg width="320" height="320" hidden$="{{ estado == 'esperando' }}">
+                <clipPath id="cut-circle">
+                    <rect x="0" y="0" width="150" height="150" />
+                </clipPath>
+                <circle cx="160" cy="160" r="160" fill="#ddd" />
+                <circle class="simonbutton" on-click="click" data-i='1' cx="160" cy="160" r="150" clip-path="url(#cut-circle)" fill="green" ng-class="{jugando: ('jugando' == estado), active: (ilumina==1)}" transform="translate(10,10)" />
+                <circle class="simonbutton" on-click="click" data-i='2' cx="160" cy="160" r="150" clip-path="url(#cut-circle)" fill="red" ng-class="{jugando: ('jugando' == estado), active: (ilumina==2)}" transform="rotate(90 150 150), translate(10, -10)" />
+                <circle class="simonbutton" on-click="click" data-i='3' cx="160" cy="160" r="150" clip-path="url(#cut-circle)" fill="blue" ng-class="{jugando: ('jugando' == estado), active: (ilumina==3)}" transform="rotate(180 150 150), translate(-10,-10)" />
+                <circle class="simonbutton" on-click="click" data-i='4' cx="160" cy="160" r="150" clip-path="url(#cut-circle)" fill="yellow" ng-class="{jugando: ('jugando' == estado), active: (ilumina==4)}" transform="rotate(270 150 150), translate(-10,10)" />
+                <rect x="155" y="0" width="10" height="320" fill="#ddd" />
+                <rect x="0" y="155" width="320" height="10" fill="#ddd" />
+                <circle cx="160" cy="160" r="40" fill="#ddd" />
+            </svg>
+        </div>
+    </template>
+</dom-module>
+<script>
+Polymer({
+    is: 'tablero-simon',
+    properties: {
+        titulo: {
+            type: String
+        },
+        dificultad: {
+            type: String,
+            notify: true
+        }
+    },
+    ready: function() {
+        this.tones = new window.Tones();
+        this.marcados = [];
+        this.dificultades = [{
+            iluminado: 1000,
+            apagado: 500,
+            esperaCuentaAtras: 5000
+        }, {
+            iluminado: 700,
+            apagado: 300,
+            esperaCuentaAtras: 4000
+        }, {
+            iluminado: 550,
+            apagado: 200,
+            esperaCuentaAtras: 2000
+        }, {
+            iluminado: 400,
+            apagado: 100,
+            esperaCuentaAtras: 1000
+        }];
+        this.iluminado = this.dificultades[0].iluminado;
+        this.apagado = this.dificultades[0].apagado;
+        this.esperaCuentaAtras = this.dificultades[0].esperaCuentaAtras;
+        this.estado = 'esperando';
+    },
+    iluminaSecuencia: function() {
+        var defer = Promise.defer(),
+            pendientes = this.pasos.slice();
+
+        function siguiente() {
+            if (pendientes.length === 0) {
+                defer.resolve();
+            } else {
+                this.ilumina = pendientes.shift();
+                this.tones.play(this.ilumina, this.iluminado);
+                this.async(function() {
+                    this.ilumina = 0;
+                    this.async(siguiente, this.apagado);
+                }, this.iluminado);
+            }
+        }
+        this.async(siguiente, 1500);
+        return defer;
+    },
+
+    agregaPaso: function() {
+        this.estado = 'mostrando';
+        this.push('pasos', Math.ceil(Math.random() * 4));
+        this.iluminaSecuencia().then(function() {
+            this.estado = 'jugando';
+            this.marcados = [];
+            this.iniciaCuentaAtras();
+        });
+    },
+
+    cancelaCuentaAtras: function() {
+        this.cancelAsync(this.cuentaAtras);
+    },
+
+    iniciaCuentaAtras: function() {
+        this.async(function() {
+            partida.resolve({
+                tipo: 'tiempo'
+            });
+        }, esperaCuentaAtras);
+    },
+
+    compruebaEntrada: function() {
+        var i, len = this.marcados.length;
+        for (i = 0; i < len; i++) {
+            if (marcados[i] !== pasos[i]) {
+                partida.resolve({
+                    tipo: 'error',
+                    posicion: i
+                });
+                return;
+            }
+        }
+        if (this.marcados.length === this.pasos.length) {
+            this.agregaPaso();
+        } else {
+            this.iniciaCuentaAtras();
+        }
+    },
+
+    iniciaPartida: function() {
+        this.pasos = [];
+        this.horaInicio = new Date();
+        this.partida = Promise.defer();
+        this.agregaPaso();
+        return partida;
+    },
+
+    empieza: function() {
+        if (this.estado !== 'esperando') {
+            return;
+        }
+        this.iniciaPartida().then(this.finPartida);
+    },
+
+    finPartida: function(motivo) {
+        this.async(function() {
+            var resultado = {
+                tiempo: Math.ceil(((new Date()) - horaInicio) / 1000),
+                movimientos: pasos.length,
+                motivo: motivo,
+                dificultad: this.dificultad
+            };
+
+            this.estado = 'esperando';
+            this.fin({
+                resultado: resultado
+            });
+
+        }, 10);
+    },
+
+
+    click: function(e) {
+        var cual = parseInt(e.target.getAttribute('data-i'), 10);
+        if (this.estado !== 'jugando') {
+            return;
+        }
+        console.log(cual);
+        this.tones.play(cual, iluminado);
+        this.push('marcados', cual);
+        this.cancelaCuentaAtras();
+        this.compruebaEntrada();
+    }
+});
+</script>

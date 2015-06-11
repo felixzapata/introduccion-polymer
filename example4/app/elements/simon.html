@@ -1,0 +1,91 @@
+<link rel="import" href="../bower_components/polymer/polymer.html">
+<link rel="import" href="tablero-simon.html">
+<dom-module id="my-simon">
+    <template>
+        <h3>Simon</h3>
+        <div hidden$="{{!jugando}}">
+            <tablero-simon titulo="Simon con Polymer" dificultad="{{dificultad}}"></tablero-simon>
+            <!--tablero-simon titulo="Simon con Polymer" dificultad="dificultad" on-end="muestraResultado(resultado)"></tablero-simon-->
+        </div>
+        <div hidden$="{{jugando}}">
+            <div hidden$="{{!resultado}}">
+                <p>Tus resultados:</p>
+                <dl>
+                    <dt>Tiempo:</dt>
+                    <dd>{{resultado.tiempo}}</dd>
+                    <dt>Movientos:</dt>
+                    <dd>{{resultado.movimientos}}</dd>
+                    <dt>Posición</dt>
+                    <dd>{{resultado.posicion}} de {{resultados.length}}</dd>
+                </dl>
+            </div>
+            <p>Selecciona la dificultad:</p>
+            <p>
+                <button class="btn btn-success" on-click="empieza">1</button>
+                <button class="btn btn-info" on-click="empieza">2</button>
+                <button class="btn btn-warning" on-click="empieza">3</button>
+                <button class="btn btn-danger" on-click="empieza">4</button>
+            </p>
+            <table class="table" hidden$="{{ !resultados.length > 0 }}">
+                <tr>
+                    <th>Posicion</th>
+                    <th>Dificultad</th>
+                    <th>Movimientos</th>
+                    <th>Tiempo</th>
+                    <th>Motivo</th>
+                </tr>
+                <template is="dom-repeat" items="{{resultados}}" as="res">
+                    <tr ng-class="{actual: (res == resultado)}">
+                        <td>{{res.posicion}}</td>
+                        <td><span class="label" ng-class="{
+                        'label-success': (res.dificultad == 1),
+                        'label-info': (res.dificultad == 2),
+                        'label-warning': (res.dificultad == 3),
+                        'label-danger': (res.dificultad == 4)
+                    }">{{res.dificultad}}</span></td>
+                        <td>{{res.movimientos}}</td>
+                        <td>{{res.tiempo}}s</td>
+                        <td>{{res.motivo.tipo}}</td>
+                    </tr>
+                </template>
+            </table>
+        </div>
+    </template>
+</dom-module>
+<script>
+Polymer({
+    is: 'my-simon',
+    properties: {
+        jugando: {
+            type: Boolean,
+            value: false
+        },
+        resultados: {
+            value: function() {
+                return [];
+            }
+        },
+        dificultad: {
+          type: String,
+          notify: true
+        }
+    },
+
+    empieza: function(e) {
+        var dificultad = parseInt(e.target.firstChild.nodeValue, 10);
+        this.dificultad = dificultad;
+        this.jugando = true;
+    },
+
+    muestraResultado: function(resultado) {
+        this.jugando = false;
+        this.resultado = resultado;
+        this.push('resultados', resultado);
+        this.resultados.sort(function(a, b) {
+            return a.movimientos - b.movimientos;
+        });
+        resultado.posicion = resultados.indexOf(resultado) + 1;
+    }
+
+});
+</script>
