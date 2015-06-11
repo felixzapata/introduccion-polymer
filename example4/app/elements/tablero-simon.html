@@ -89,7 +89,7 @@ Polymer({
             this.estado = 'jugando';
             this.marcados = [];
             this.iniciaCuentaAtras();
-        });
+        }.bind(this));
     },
 
     cancelaCuentaAtras: function() {
@@ -101,7 +101,7 @@ Polymer({
             this.partida.resolve({
                 tipo: 'tiempo'
             });
-        }, esperaCuentaAtras);
+        }.bind(this), this.esperaCuentaAtras);
     },
 
     compruebaEntrada: function() {
