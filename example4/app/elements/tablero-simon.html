@@ -62,23 +62,24 @@ Polymer({
         this.estado = 'esperando';
     },
     iluminaSecuencia: function() {
-        var defer = Promise.defer(),
-            pendientes = this.pasos.slice();
+        return new Promise(function(resolve, reject) {
+            var pendientes = this.pasos.slice();
 
-        function siguiente() {
-            if (pendientes.length === 0) {
-                defer.resolve();
-            } else {
-                this.ilumina = pendientes.shift();
-                this.tones.play(this.ilumina, this.iluminado);
-                this.async(function() {
-                    this.ilumina = 0;
-                    this.async(siguiente, this.apagado);
-                }, this.iluminado);
+            function siguiente() {
+                if (pendientes.length === 0) {
+                    resolve();
+                } else {
+                    this.ilumina = pendientes.shift();
+                    this.tones.play(this.ilumina, this.iluminado);
+                    this.async(function() {
+                        this.ilumina = 0;
+                        this.async(siguiente, this.apagado);
+                    }, this.iluminado);
+                }
             }
-        }
-        this.async(siguiente, 1500);
-        return defer;
+            this.async(siguiente, 1500);
+        }.bind(this));
+
     },
 
     agregaPaso: function() {
@@ -97,7 +98,7 @@ Polymer({
 
     iniciaCuentaAtras: function() {
         this.async(function() {
-            partida.resolve({
+            this.partida.resolve({
                 tipo: 'tiempo'
             });
         }, esperaCuentaAtras);
@@ -107,7 +108,7 @@ Polymer({
         var i, len = this.marcados.length;
         for (i = 0; i < len; i++) {
             if (marcados[i] !== pasos[i]) {
-                partida.resolve({
+                this.partida.resolve({
                     tipo: 'error',
                     posicion: i
                 });
@@ -124,9 +125,10 @@ Polymer({
     iniciaPartida: function() {
         this.pasos = [];
         this.horaInicio = new Date();
-        this.partida = Promise.defer();
-        this.agregaPaso();
-        return partida;
+        this.partida = new Promise(function(resolve, reject) {
+            return this.agregaPaso();
+        }.bind(this));
+        return this.partida;
     },
 
     empieza: function() {
