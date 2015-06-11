@@ -35,6 +35,9 @@ Polymer({
             type: String,
             notify: true
         },
+        onEnd: {
+            type: Function
+        }
     },
     classForCircle: function(estado, ilumina, cual) {
         var classElements = ['simonbutton'];
@@ -158,7 +161,7 @@ Polymer({
             };
 
             this.estado = 'esperando';
-            this.fin({
+            this.onEnd({
                 resultado: resultado
             });
 
