@@ -41,10 +41,10 @@ Polymer({
     },
     classForCircle: function(estado, ilumina, cual) {
         var classElements = ['simonbutton'];
-        if(estado === 'jugando'){
+        if (estado === 'jugando') {
             classElements.push('jugando');
         }
-        if(ilumina === cual){
+        if (ilumina === cual) {
             classElements.push('active');
         }
         return classElements.join(' ');
@@ -75,23 +75,23 @@ Polymer({
         this.estado = 'esperando';
     },
     iluminaSecuencia: function() {
-        return new Promise(function(resolve, reject) {
-            var pendientes = this.pasos.slice();
+        var defer = Q.defer(),
+            pendientes = this.pasos.slice();
 
-            function siguiente() {
-                if (pendientes.length === 0) {
-                    resolve();
-                } else {
-                    this.ilumina = pendientes.shift();
-                    this.tones.play(this.ilumina, this.iluminado);
-                    this.async(function() {
-                        this.ilumina = 0;
-                        this.async(siguiente, this.apagado);
-                    }, this.iluminado);
-                }
+        function siguiente() {
+            if (pendientes.length === 0) {
+                defer.resolve();
+            } else {
+                this.ilumina = pendientes.shift();
+                this.tones.play(this.ilumina, this.iluminado);
+                this.async(function() {
+                    this.ilumina = 0;
+                    this.async(siguiente, this.apagado);
+                }, this.iluminado);
             }
-            this.async(siguiente, 1500);
-        }.bind(this));
+        }
+        this.async(siguiente, 1500);
+        return defer.promise;
 
     },
 
@@ -138,9 +138,9 @@ Polymer({
     iniciaPartida: function() {
         this.pasos = [];
         this.horaInicio = new Date();
-        this.partida = Promise;
+        this.partida = Q.defer();
         this.agregaPaso();
-        return this.partida;
+        return this.partida.promise;
     },
 
     empieza: function() {
