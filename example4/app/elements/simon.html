@@ -4,7 +4,6 @@
     <template>
         <h3>Simon</h3>
         <div hidden$="{{!jugando}}">
-            <!--tablero-simon titulo="Simon con Polymer" dificultad="{{dificultad}}"></tablero-simon-->
             <tablero-simon titulo="Simon con Polymer" dificultad="{{dificultad}}" on-end="muestraResultado(resultado)"></tablero-simon>
         </div>
         <div hidden$="{{jugando}}">
