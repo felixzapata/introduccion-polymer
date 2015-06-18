@@ -147,14 +147,14 @@ Polymer({
         if (this.estado !== 'esperando') {
             return;
         }
-        this.iniciaPartida().then(this.finPartida);
+        this.iniciaPartida().then(this.finPartida.bind(this));
     },
 
     finPartida: function(motivo) {
         this.async(function() {
             var resultado = {
-                tiempo: Math.ceil(((new Date()) - horaInicio) / 1000),
-                movimientos: pasos.length,
+                tiempo: Math.ceil(((new Date()) - this.horaInicio) / 1000),
+                movimientos: this.pasos.length,
                 motivo: motivo,
                 dificultad: this.dificultad
             };
@@ -164,7 +164,7 @@ Polymer({
                 resultado: resultado
             });
 
-        }, 10);
+        }.bind(this), 10);
     },
 
 
