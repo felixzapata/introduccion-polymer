@@ -138,9 +138,8 @@ Polymer({
     iniciaPartida: function() {
         this.pasos = [];
         this.horaInicio = new Date();
-        this.partida = new Promise(function(resolve, reject) {
-            return this.agregaPaso();
-        }.bind(this));
+        this.partida = Promise;
+        this.agregaPaso();
         return this.partida;
     },
 
