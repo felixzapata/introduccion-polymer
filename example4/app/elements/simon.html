@@ -25,21 +25,21 @@
                 <button class="btn btn-warning" on-click="empieza">3</button>
                 <button class="btn btn-danger" on-click="empieza">4</button>
             </p>
-            <table class="table" hidden$="{{ !resultados.length > 0 }}">
+            <table class="table" hidden$="{{ resultados.length > 0 }}">
                 <tr>
                     <th>Posicion</th>
                     <th>Dificultad</th>
                     <th>Movimientos</th>
-                    <th>Tiempo</th>
+                    <th>Tiempo (en segundos)</th>
                     <th>Motivo</th>
                 </tr>
                 <template is="dom-repeat" items="{{resultados}}" as="res">
                     <tr class$="{{getActual(res)}}">
                         <td>{{res.posicion}}</td>
-                        <td><span class$="{{getResultado(res)}}">{{res.dificultad}}</span></td>
-                        <td>{{res.movimientos}}</td>
-                        <td>{{res.tiempo}}s</td>
-                        <td>{{res.motivo.tipo}}</td>
+                        <td><span class$="{{getResultado(res)}}">{{res.resultado.dificultad}}</span></td>
+                        <td>{{res.resultado.movimientos}}</td>
+                        <td>{{res.resultado.tiempo}}</td>
+                        <td>{{res.resultado.motivo.tipo}}</td>
                     </tr>
                 </template>
             </table>
@@ -87,7 +87,7 @@ Polymer({
         this.resultados.sort(function(a, b) {
             return a.movimientos - b.movimientos;
         });
-        resultado.posicion = this.resultados.indexOf(this.resultado) + 1;
+        this.resultado.posicion = this.resultados.indexOf(this.resultado) + 1;
     }
 
 });
