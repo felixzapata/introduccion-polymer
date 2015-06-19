@@ -5,10 +5,10 @@
         <h4>{{titulo}}</h4>
         <div on-click="empieza">
             <p>
-                <span class="btn btn-success" hidden$="{{ estado != 'esperando' }}">Start!</span>
+                <span class="btn btn-success" hidden$="{{ !checkEstadoEsperando }}">Start!</span>
                 <span>(Dificultad: <span>{{dificultad}}</span>)</span>
             </p>
-            <svg width="320" height="320" hidden$="{{ estado == 'esperando' }}">
+            <svg width="320" height="320" hidden$="{{ checkEstadoEsperando }}">
                 <clipPath id="cut-circle">
                     <rect x="0" y="0" width="150" height="150" />
                 </clipPath>
@@ -36,16 +36,7 @@ Polymer({
             notify: true
         }
     },
-    classForCircle: function(estado, ilumina, cual) {
-        var classElements = ['simonbutton'];
-        if (estado === 'jugando') {
-            classElements.push('jugando');
-        }
-        if (ilumina === cual) {
-            classElements.push('active');
-        }
-        return classElements.join(' ');
-    },
+    
     ready: function() {
         this.tones = new window.Tones();
         this.marcados = [];
@@ -70,6 +61,19 @@ Polymer({
         this.apagado = this.dificultades[0].apagado;
         this.esperaCuentaAtras = this.dificultades[0].esperaCuentaAtras;
         this.estado = 'esperando';
+    },
+    checkEstadoEsperando: function(){
+        return this.estado === 'esperando';
+    }, 
+    classForCircle: function(estado, ilumina, cual) {
+        var classElements = ['simonbutton'];
+        if (estado === 'jugando') {
+            classElements.push('jugando');
+        }
+        if (ilumina === cual) {
+            classElements.push('active');
+        }
+        return classElements.join(' ');
     },
     iluminaSecuencia: function() {
         var defer = Q.defer(),
