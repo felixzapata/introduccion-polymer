@@ -3,12 +3,12 @@
     <link rel="stylesheet" href="simon.css" />
     <template>
         <h4>{{titulo}}</h4>
-        <div on-click="empieza">
+        <div>
             <p>
-                <span class="btn btn-success" hidden$="{{ !checkEstadoEsperando }}">Start!</span>
+                <button type="button"  on-click="empieza" class="btn btn-success" hidden$="{{ !checkEstadoEsperando(estado) }}">Start!</button>
                 <span>(Dificultad: <span>{{dificultad}}</span>)</span>
             </p>
-            <svg width="320" height="320" hidden$="{{ checkEstadoEsperando }}">
+            <svg width="320" height="320" hidden$="{{ checkEstadoEsperando(estado) }}">
                 <clipPath id="cut-circle">
                     <rect x="0" y="0" width="150" height="150" />
                 </clipPath>
@@ -62,8 +62,8 @@ Polymer({
         this.esperaCuentaAtras = this.dificultades[0].esperaCuentaAtras;
         this.estado = 'esperando';
     },
-    checkEstadoEsperando: function(){
-        return this.estado === 'esperando';
+    checkEstadoEsperando: function(estado){
+        return estado === 'esperando';
     }, 
     classForCircle: function(estado, ilumina, cual) {
         var classElements = ['simonbutton'];
