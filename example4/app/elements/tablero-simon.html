@@ -34,9 +34,6 @@ Polymer({
         dificultad: {
             type: String,
             notify: true
-        },
-        onEnd: {
-            type: Function
         }
     },
     classForCircle: function(estado, ilumina, cual) {
@@ -160,7 +157,7 @@ Polymer({
             };
 
             this.estado = 'esperando';
-            this.onEnd({
+            this.fire('end', {
                 resultado: resultado
             });
 
