@@ -25,7 +25,7 @@
                 <button class="btn btn-warning" on-click="empieza">3</button>
                 <button class="btn btn-danger" on-click="empieza">4</button>
             </p>
-            <table class="table" hidden$="{{checkResults}}">
+            <table class="table" hidden$="{{!checkResultados(resultados)}}">
                 <tr>
                     <th>Posicion</th>
                     <th>Dificultad</th>
@@ -65,8 +65,8 @@ Polymer({
         }
     },
 
-    checkResults: function(){
-        return this.resultados.length > 0;
+    checkResultados: function(resultados) {
+        return resultados.length === 0;
     },
 
     getClassActual: function(idx){
