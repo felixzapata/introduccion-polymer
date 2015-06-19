@@ -66,7 +66,7 @@ Polymer({
     },
 
     getActual: function(idx){
-      return (idx == resultado) ? 'actual' : '';
+      return (idx == this.resultado) ? 'actual' : '';
     },
 
     getResultado:function(idx){
@@ -87,7 +87,7 @@ Polymer({
         this.resultados.sort(function(a, b) {
             return a.movimientos - b.movimientos;
         });
-        resultado.posicion = resultados.indexOf(resultado) + 1;
+        resultado.posicion = this.resultados.indexOf(this.resultado) + 1;
     }
 
 });
