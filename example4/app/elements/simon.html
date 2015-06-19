@@ -4,7 +4,7 @@
     <template>
         <h3>Simon</h3>
         <div hidden$="{{!jugando}}">
-            <tablero-simon titulo="Simon con Polymer" dificultad="{{dificultad}}" on-end="muestraResultado(resultado)"></tablero-simon>
+            <tablero-simon titulo="Simon con Polymer" dificultad="{{dificultad}}" on-end="muestraResultado"></tablero-simon>
         </div>
         <div hidden$="{{jugando}}">
             <div hidden$="{{!resultado}}">
@@ -80,7 +80,7 @@ Polymer({
         this.jugando = true;
     },
 
-    muestraResultado: function(resultado) {
+    muestraResultado: function(e, resultado) {
         this.jugando = false;
         this.resultado = resultado;
         this.push('resultados', resultado);
