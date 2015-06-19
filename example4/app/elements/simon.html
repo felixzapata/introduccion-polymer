@@ -25,7 +25,7 @@
                 <button class="btn btn-warning" on-click="empieza">3</button>
                 <button class="btn btn-danger" on-click="empieza">4</button>
             </p>
-            <table class="table" hidden$="{{ resultados.length > 0 }}">
+            <table class="table" hidden$="{{checkResults}}">
                 <tr>
                     <th>Posicion</th>
                     <th>Dificultad</th>
@@ -34,9 +34,9 @@
                     <th>Motivo</th>
                 </tr>
                 <template is="dom-repeat" items="{{resultados}}" as="res">
-                    <tr class$="{{getActual(res)}}">
+                    <tr class$="{{getClassActual(res)}}">
                         <td>{{res.posicion}}</td>
-                        <td><span class$="{{getResultado(res)}}">{{res.resultado.dificultad}}</span></td>
+                        <td><span class$="{{getClassResultado(res)}}">{{res.resultado.dificultad}}</span></td>
                         <td>{{res.resultado.movimientos}}</td>
                         <td>{{res.resultado.tiempo}}</td>
                         <td>{{res.resultado.motivo.tipo}}</td>
@@ -65,11 +65,15 @@ Polymer({
         }
     },
 
-    getActual: function(idx){
+    checkResults: function(){
+        return this.resultados.length > 0;
+    },
+
+    getClassActual: function(idx){
       return (idx == this.resultado) ? 'actual' : '';
     },
 
-    getResultado:function(idx){
+    getClassResultado:function(idx){
       var tipos = ['label-success', 'label-info', 'label-warning', 'label-danger'];
       return 'label ' + tipos[idx.dificultad];
     },
